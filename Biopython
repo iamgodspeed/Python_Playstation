@@ -6,6 +6,9 @@ sudo easy_install -f http://biopython.org/DIST/ biopython
 
 # make sure it works
 $ python
+>>> import Bio
+>>> print(Bio__version__)
+
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet.IUPAC import unambiguous_dna
 >>> new_seq = Seq('GATCAGAAG', unambiguous_dna)
