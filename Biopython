@@ -1,0 +1,16 @@
+# source
+http://biopython.org/DIST/docs/install/Installation.html#sec25
+
+# install
+sudo easy_install -f http://biopython.org/DIST/ biopython
+
+# make sure it works
+$ python
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet.IUPAC import unambiguous_dna
+>>> new_seq = Seq('GATCAGAAG', unambiguous_dna)
+>>> new_seq[0:2]
+Seq('GA', IUPACUnambiguousDNA())
+>>> new_seq.translate()
+Seq('DQK', HasStopCodon(IUPACProtein(), '*'))
+>>>
