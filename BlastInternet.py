@@ -19,14 +19,3 @@ for alignment in blast_record.alignments:
             print('hsp.match')
             print('hsp.sbjct')
 
-
-
-
-
-
-
-
-
-
-
-
