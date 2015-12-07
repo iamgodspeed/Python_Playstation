@@ -18,6 +18,7 @@
 
 import regex as re
 
+
 try:
     f = open('/Users/chuan/Desktop/DATA_JHU/1_python_introduction/dna1.fasta')
 except IOError:
@@ -51,53 +52,73 @@ print "shortest record: ",  min(seqs_length.values())  # 475
 '''======================================================='''
 
 # Open Reading Frame
+
 seq = seqs.values()[1]
-# get RF1:
-rfs1 = re.findall('...', seq)
-print 'rf1: ',rfs1
-# get RF2:
-rfs2 = re.findall('...', seq[1:])
-print 'rf2: ',rfs2
-# get RF3:
-rfs3 = re.findall('...', seq[2:])
-print 'rf3: ',rfs3
+
+def get_rf_123(seq):
+    rf_123 = {}
+    # get RF1:
+    rf_123['rf1'] = re.findall('...', seq)
+
+    # get RF2:
+    rf_123['rf2'] = re.findall('...', seq[1:])
+
+    # get RF3:
+    rf_123['rf3'] = re.findall('...', seq[2:])
+
+    return(rf_123)
 
 
-rfs = rfs2
+rf = rf2
 
-# all start codon position
-# [20, 42, 93, 131, 282, 288, 346, 1005]
-find = 'ATG'
-start = [i for i,v in enumerate(rfs) if v == find]
-print "start: ", start
+def get_orf(rf):
 
-# all end codon position
-# [8, 12, 62, 97, 153, 171, 328, 381, 394, 401, 407, 541, 563, 581, 595, 607, 616, 692, 702, 712, 744]
-find = ['TAA', 'TAG', 'TGA']
-end = [i for i,v in enumerate(rfs) if v in find]
-print "end: ", end
+    # all start codon position
+    # [20, 42, 93, 131, 282, 288, 346, 1005]
+    find = 'ATG'
+    start = [i for i,v in enumerate(rf) if v == find]
+    print "start: ", start
 
-
-# get dict {start:end, start:end, ...}
-all_orf = {}
-used_start = []
-
-for j in range(len(end)):
-
-    for i in range(len(start)):
-        if end[j] > start[-i-1] & start[-i-1] not in used_start:
-            all_orf[start[-i-1]] = end[j]
-            used_start.extend(start[0:-i-1+1])
-            break
+    # all end codon position
+    # [8, 12, 62, 97, 153, 171, 328, 381, 394, 401, 407, 541, 563, 581, 595, 607, 616, 692, 702, 712, 744]
+    find = ['TAA', 'TAG', 'TGA']
+    end = [i for i,v in enumerate(rf) if v in find]
+    print "end: ", end
 
 
-v = list(map(lambda x: x[0]-x[1], zip(all_orf.values(), all_orf.keys())))
+    # get dict {start:end, start:end, ...}
+    all_orf = {}
+    used_start = []
 
-print 'ORF lengths: ', v
+    for j in range(len(end)):
 
-idx = v.index(max(v))
+        for i in range(len(start)):
+            if end[j] > start[-i-1] & start[-i-1] not in used_start:
+                all_orf[start[-i-1]] = end[j]
+                used_start.extend(start[0:-i-1+1])
+                break
+    print all_orf
 
-print 'longest ORF start idx: ', all_orf.keys()[idx]
+    return(all_orf)
+
+
+def get_orf_length(all_orf):
+
+    collection = {}
+
+    v = list(map(lambda x: x[0]-x[1], zip(all_orf.values(), all_orf.keys())))
+
+    collection['lengths'] = v
+
+    idx_l = v.index(max(v))
+
+    collection['longest'] = all_orf.keys()[idx_l]
+
+    idx_s = v.index(min(v))
+
+    collection['shortest'] = all_orf.keys()[idx_s]
+
+    return(collection)
 
 
 '''======================================================='''
